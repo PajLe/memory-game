@@ -13,8 +13,7 @@ namespace Memory_game
 {
     public partial class MainForm : Form
     {
-        private static readonly int fieldWidth = 100;
-        private static readonly int fieldHeight = 100;
+        private MemoryGrid grid;
 
         public MainForm()
         {
@@ -24,29 +23,24 @@ namespace Memory_game
         private void MainForm_Load(object sender, EventArgs e)
         {
             
-            for (int y = 0; y < 6; y++)
-            {
-                for (int x = 0; x < 10; x++)
-                {
-                    Field field = new MemoryField( x * (fieldWidth + 3), 
-                        labelTimer.Location.Y + labelTimer.Height + y * (fieldHeight + 3), 
-                        fieldWidth, 
-                        fieldHeight);
-                    field.OpenImage = Properties.Resources._1;
-                    field.Click += new EventHandler(Field_Click);
-                    this.Controls.Add(field);
-                }
-                
-            }
-            
         }
 
-        private void Field_Click(object sender, EventArgs e)
+        private void gameToolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            Field fld = sender as Field;
-            if (fld != null)
-                fld.Open();
+            if (grid != null)
+            {
+                this.Controls.Remove(grid);
+                grid.Dispose();
+            }
+            grid = new MemoryGrid();
+            grid.Location = new Point(0, labelTimer.Location.Y + labelTimer.Height);
+            this.Controls.Add(grid);
+
+            labelTimer.Text = "00:00";
+            labelTimer.Location = new Point((grid.Width - labelTimer.Width) / 2, labelTimer.Location.Y);
+            labelTimer.Visible = true;
         }
+
         
     }
 }

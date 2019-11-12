@@ -49,7 +49,7 @@
             this.newToolStripMenuItem1});
             this.mStripOptions.Location = new System.Drawing.Point(0, 0);
             this.mStripOptions.Name = "mStripOptions";
-            this.mStripOptions.Size = new System.Drawing.Size(976, 24);
+            this.mStripOptions.Size = new System.Drawing.Size(1034, 24);
             this.mStripOptions.TabIndex = 60;
             this.mStripOptions.Text = "menuStrip1";
             // 
@@ -80,6 +80,7 @@
             this.gameToolStripMenuItem1.Name = "gameToolStripMenuItem1";
             this.gameToolStripMenuItem1.Size = new System.Drawing.Size(105, 22);
             this.gameToolStripMenuItem1.Text = "Game";
+            this.gameToolStripMenuItem1.Click += new System.EventHandler(this.gameToolStripMenuItem1_Click);
             // 
             // fileToolStripMenuItem
             // 
@@ -115,19 +116,19 @@
             // 
             this.labelTimer.AutoSize = true;
             this.labelTimer.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelTimer.Location = new System.Drawing.Point(121, 41);
+            this.labelTimer.Location = new System.Drawing.Point(407, 35);
             this.labelTimer.Name = "labelTimer";
             this.labelTimer.Size = new System.Drawing.Size(109, 24);
             this.labelTimer.TabIndex = 61;
             this.labelTimer.Text = "labelTimer";
+            this.labelTimer.Visible = false;
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
-            this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.ClientSize = new System.Drawing.Size(976, 441);
+            this.ClientSize = new System.Drawing.Size(1034, 661);
             this.Controls.Add(this.labelTimer);
             this.Controls.Add(this.mStripOptions);
             this.MainMenuStrip = this.mStripOptions;
