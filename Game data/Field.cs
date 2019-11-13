@@ -8,12 +8,15 @@ using System.Windows.Forms;
 
 namespace Game_data
 {
-    public abstract class Field : PictureBox
+    abstract class Field : PictureBox
     {
         protected static readonly Image _closedImage = Properties.Resources.closed;
         private Image _openImage;
+        private string _imageName;
+        protected bool opened = false;
 
         public Image OpenImage { get => _openImage; set => _openImage = value; }
+        public string ImageName { get => _imageName; set => _imageName = value; }
 
         public Field()
         {
@@ -29,12 +32,12 @@ namespace Game_data
 
         public bool Open()
         {
-            if (OpenImage != null)
+            if (OpenImage != null && !opened)
             {
                 Image = OpenImage;
-                return true;
+                opened = true;
             }
-            return false;
+            return opened;
         }
     }
 }

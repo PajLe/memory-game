@@ -8,7 +8,7 @@ using System.Windows.Forms;
 
 namespace Game_data
 {
-    public class MemoryField : ClosableField
+    class MemoryField : ClosableField
     {
 
         public MemoryField(int xPos, int yPos, int xSize, int ySize)

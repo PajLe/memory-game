@@ -15,6 +15,7 @@ namespace Game_data
         {
             ClientSize = new Size(xSize, ySize);
             Location = new System.Drawing.Point(xPos, yPos);
+            OpenImage = Properties.Resources.empty;
         }
         
     }

@@ -6,15 +6,15 @@ using System.Threading.Tasks;
 
 namespace Game_data
 {
-    public abstract class ClosableField : Field
+    abstract class ClosableField : Field
     {
         public bool Close() {
-            if (_closedImage != null)
+            if (_closedImage != null && opened)
             {
                 Image = _closedImage;
-                return true;
+                opened = false;
             }
-            return false;
+            return !opened;
         }
     }
 }
