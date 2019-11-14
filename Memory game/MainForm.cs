@@ -34,6 +34,7 @@ namespace Memory_game
             {
                 this.Controls.Remove(grid);
                 grid.Dispose();
+                gameTimer.Stop();
             }
             grid = new MemoryGrid();
             grid.Location = new Point(0, labelTimer.Location.Y + labelTimer.Height);

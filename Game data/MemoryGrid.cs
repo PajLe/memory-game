@@ -43,7 +43,6 @@ namespace Game_data
         {
             setSizes(rowSize, columnSize, pairCount, differentImageCount);
             allocateGrid();
-            // Location = new System.Drawing.Point()
             this.ClientSize = new Size(columnSize * (fieldWidth + 3), rowSize * (fieldHeight + 3));
             initGame();
         }
@@ -68,55 +67,111 @@ namespace Game_data
 
         private void initGame()
         {
+            initClosableFields();
             for (int y = 0; y < rowSize; y++)
             {
                 for (int x = 0; x < columnSize; x++)
                 {
                     if (grid[y][x] == null)
                     {
-                        Field field = new MemoryField(x * (fieldWidth + 3),
+                        Field field = new EmptyField(x * (fieldWidth + 3),
                             y * (fieldHeight + 3),
                             fieldWidth,
                             fieldHeight);
-                        if (x % 2 == 0)
-                        {
-                            field.OpenImage = Properties.Resources._1;
-                            field.ImageName = nameof(Properties.Resources._1);
-                        }
-                        else
-                        {
-                            field.OpenImage = Properties.Resources._2;
-                            field.ImageName = nameof(Properties.Resources._2);
-                        }
                         field.Click += new EventHandler(Field_Click);
 
                         grid[y][x] = field;
-                        this.Controls.Add(grid[y][x]);
                     }
+                    this.Controls.Add(grid[y][x]);
                 }
             }
-            differentImages();
+        }
+
+        private void initClosableFields()
+        {
+            Queue<Point> differentPoints = differentFieldPoints();
+            List<Image> images = differentImages();
+            while (differentPoints.Count > 0)
+            {
+                foreach (Image image in images)
+                {
+                    Point p1 = differentPoints.Dequeue();
+                    createMemoryField(p1.X, p1.Y, image);
+
+                    Point p2 = differentPoints.Dequeue();
+                    createMemoryField(p2.X, p2.Y, image);
+                    if (differentPoints.Count == 0) break;
+                }
+            }
+        }
+
+        private void createMemoryField(int x, int y, Image image)
+        {
+            Field field = new MemoryField(x * (fieldWidth + 3),
+                            y * (fieldHeight + 3),
+                            fieldWidth,
+                            fieldHeight);
+            field.OpenImage = image;
+            field.OpenImage.Tag = image.Tag;
+            field.Click += new EventHandler(Field_Click);
+            grid[y][x] = field;
+        }
+
+        private Queue<Point> differentFieldPoints()
+        {
+            Random r = new Random();
+            Queue<Point> points = new Queue<Point>();
+
+            for (int i = 0; i < pairCount * 2; i++)
+            {
+                Point p;
+                do
+                {
+                    int x = r.Next(0, columnSize);
+                    int y = r.Next(0, rowSize);
+                    p = new Point(x, y);
+                } while (points.Contains(p));
+                points.Enqueue(p);
+            }
+
+            return points;
+        }
+
+        private List<Image> differentImages()
+        {
+            ResourceManager resourceManager = new ResourceManager(typeof(Properties.Resources));
+            ResourceSet resourceSet = resourceManager.GetResourceSet(CultureInfo.CurrentUICulture, true, true);
+
+            List<string> imageResourceKeys = new List<string>();
+            foreach (DictionaryEntry entry in resourceSet)
+            {
+                string resourceKey = entry.Key.ToString();
+                if (!resourceKey.Equals("closed") && !resourceKey.Equals("empty"))
+                    imageResourceKeys.Add(resourceKey);
+            }
+
+            List<int> randomies = new List<int>();
+            Random r = new Random();
+            for (int i = 0; i < differentImageCount; i++)
+            {
+                int num;
+                while (randomies.Contains(num = r.Next(0, imageResourceKeys.Count))) ;
+                randomies.Add(num);
+            }
+
+            List<Image> images = new List<Image>();
+            foreach (int c in randomies)
+            {
+                Image toAdd = resourceSet.GetObject(imageResourceKeys[c]) as Image;
+                if (toAdd != null)
+                    toAdd.Tag = imageResourceKeys[c];
+                images.Add(toAdd);
+            }
+            return images;
         }
         #endregion Constructor Methods
 
         #endregion Constructors
-
-        private List<Image> differentImages()
-        {
-            List<Image> images = new List<Image>();
-            for(int i = 0; i < differentImageCount; i++)
-            {
-                ResourceManager resourceManager = new ResourceManager(typeof(Properties.Resources));
-                ResourceSet resourceSet = resourceManager.GetResourceSet(CultureInfo.CurrentUICulture, true, true);
-                foreach (DictionaryEntry entry in resourceSet)
-                {
-                    string resourceKey = entry.Key.ToString();
-                    MessageBox.Show(resourceKey);
-                    object resource = entry.Value;
-                }
-            }
-            return images;
-        }
 
         #region Event Handlers
 
@@ -129,12 +184,13 @@ namespace Game_data
                 return;
             Application.DoEvents();
             closedFields--;
-            StartAndEndHandle();
+            this.Parent.Text = closedFields.ToString();
+            BeginAndEndHandle();
             if (previousOpenedField == null)
                 previousOpenedField = fld as ClosableField;
             else
             {
-                if (!previousOpenedField.ImageName.Equals(fld.ImageName) && fld as ClosableField != null)
+                if (!previousOpenedField.OpenImage.Tag.Equals(fld.OpenImage.Tag))
                     CloseFieldsRoutine(fld as ClosableField);
                 else
                     previousOpenedField = null;
@@ -143,6 +199,8 @@ namespace Game_data
 
         private void CloseFieldsRoutine(ClosableField currentOpenedField)
         {
+            if (currentOpenedField == null)
+                return;
             System.Threading.Thread.Sleep(1000);
             /**Timer timer = new Timer();
             timer.Interval = 1000;
@@ -154,6 +212,7 @@ namespace Game_data
             closedFields++;
             currentOpenedField.Close();
             closedFields++;
+            this.Parent.Text = closedFields.ToString();
         }
 
         /*private void closeEmUp(object sender, EventArgs e)
@@ -166,7 +225,7 @@ namespace Game_data
             closedFields++;
         }*/
 
-        private void StartAndEndHandle()
+        private void BeginAndEndHandle()
         {
             if (firstOpened != null)
             {

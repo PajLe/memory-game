@@ -12,11 +12,11 @@ namespace Game_data
     {
         protected static readonly Image _closedImage = Properties.Resources.closed;
         private Image _openImage;
-        private string _imageName;
+        //private string _imageName;
         protected bool opened = false;
 
         public Image OpenImage { get => _openImage; set => _openImage = value; }
-        public string ImageName { get => _imageName; set => _imageName = value; }
+       // public string ImageName { get => _imageName; set => _imageName = value; }
 
         public Field()
         {
