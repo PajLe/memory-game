@@ -44,7 +44,7 @@ namespace Game_data
         {
             setSizes(rowSize, columnSize, pairCount, differentImageCount);
             allocateGrid();
-            this.ClientSize = new Size(columnSize * (fieldWidth + 3), rowSize * (fieldHeight + 3));
+            this.ClientSize = new Size(this.columnCount * (fieldWidth + 3), this.rowCount * (fieldHeight + 3));
             initGame();
             setUpCloseTimer();
         }

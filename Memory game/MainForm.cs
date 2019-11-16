@@ -48,12 +48,19 @@ namespace Memory_game
 
         private void readFromConfig(out int column, out int row, out int pair, out int diffPic)
         {
-            using (StreamReader sr = new StreamReader(new FileStream("config.txt", FileMode.Open)))
+            try
             {
-                column = int.Parse(sr.ReadLine());
-                row = int.Parse(sr.ReadLine());
-                pair = int.Parse(sr.ReadLine());
-                diffPic = int.Parse(sr.ReadLine());
+                using (StreamReader sr = new StreamReader(new FileStream("config.txt", FileMode.Open)))
+                {
+                    column = int.Parse(sr.ReadLine());
+                    row = int.Parse(sr.ReadLine());
+                    pair = int.Parse(sr.ReadLine());
+                    diffPic = int.Parse(sr.ReadLine());
+                }
+            }
+            catch (Exception e)
+            {
+                column = row = pair = diffPic = 0;
             }
         }
 
