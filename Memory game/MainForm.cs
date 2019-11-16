@@ -51,7 +51,7 @@ namespace Memory_game
         private void timerStop(object sender, EventArgs e)
         {
             gameTimer.Stop();
-            MessageBox.Show("pobedili ste uwu");
+            MessageBox.Show("pobedili ste za " + timePlayed + " sekundi uwu");
         }
 
         private void timerStart(object sender, EventArgs e)

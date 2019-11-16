@@ -210,20 +210,20 @@ namespace Game_data
                         previousOpenedField = null;
                         pairCount--;
                         if (pairCount == 0)
-                            openAllEmptyFields();
+                            openAllFields();
                     }
                 }
             }
             
         }
 
-        private void openAllEmptyFields()
+        private void openAllFields()
         {
             for (int y = 0; y < rowCount; y++) 
                 for (int x = 0; x < columnCount; x++)
-                    (grid[y][x] as EmptyField)?.Open();
-            this.Parent.Text = closedFields.ToString();
+                    grid[y][x].Open();
             closedFields = 0;
+            this.Parent.Text = closedFields.ToString();
             BeginAndEndHandle();
         }
 
