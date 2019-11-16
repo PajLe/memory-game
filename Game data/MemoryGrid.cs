@@ -21,8 +21,8 @@ namespace Game_data
         private Timer closeTimer;
 
         // game parameters
-        private int rowSize; // = 6;
-        private int columnSize; // = 10;
+        private int rowCount; // = 6;
+        private int columnCount; // = 10;
         private int pairCount; // = 10;
         private int differentImageCount; // = 5;
 
@@ -60,26 +60,26 @@ namespace Game_data
 
         private void setSizes(int rowSize, int columnSize, int pairCount, int differentImageCount)
         {
-            this.rowSize = (rowSize < 6) ? 6 : rowSize;
-            this.columnSize = (columnSize < 10) ? 10 : columnSize;
+            this.rowCount = (rowSize < 6) ? 6 : rowSize;
+            this.columnCount = (columnSize < 10) ? 10 : columnSize;
             this.pairCount = (pairCount < 10) ? 10 : pairCount;
             this.differentImageCount = (differentImageCount < 5) ? 5 : differentImageCount;
         }
 
         private void allocateGrid()
         {
-            grid = new Field[rowSize][];
-            for (int i = 0; i < rowSize; i++)
-                grid[i] = new Field[columnSize];
-            closedFields = rowSize * columnSize;
+            grid = new Field[rowCount][];
+            for (int i = 0; i < rowCount; i++)
+                grid[i] = new Field[columnCount];
+            closedFields = rowCount * columnCount;
         }
 
         private void initGame()
         {
             initClosableFields();
-            for (int y = 0; y < rowSize; y++)
+            for (int y = 0; y < rowCount; y++)
             {
-                for (int x = 0; x < columnSize; x++)
+                for (int x = 0; x < columnCount; x++)
                 {
                     if (grid[y][x] == null)
                     {
@@ -136,8 +136,8 @@ namespace Game_data
                 Point p;
                 do
                 {
-                    int x = r.Next(0, columnSize);
-                    int y = r.Next(0, rowSize);
+                    int x = r.Next(0, columnCount);
+                    int y = r.Next(0, rowCount);
                     p = new Point(x, y);
                 } while (points.Contains(p));
                 points.Enqueue(p);
@@ -205,11 +205,26 @@ namespace Game_data
                 {
                     if (!previousOpenedField.OpenImage.Tag.Equals(fld.OpenImage.Tag))
                         CloseFieldsRoutine(fld as ClosableField);
-                    else
+                    else // we found a pair
+                    {
                         previousOpenedField = null;
+                        pairCount--;
+                        if (pairCount == 0)
+                            openAllEmptyFields();
+                    }
                 }
             }
             
+        }
+
+        private void openAllEmptyFields()
+        {
+            for (int y = 0; y < rowCount; y++) 
+                for (int x = 0; x < columnCount; x++)
+                    (grid[y][x] as EmptyField)?.Open();
+            this.Parent.Text = closedFields.ToString();
+            closedFields = 0;
+            BeginAndEndHandle();
         }
 
         private void CloseFieldsRoutine(ClosableField currentOpenedField)
