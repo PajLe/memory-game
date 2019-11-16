@@ -64,8 +64,9 @@
             // configureToolStripMenuItem1
             // 
             this.configureToolStripMenuItem1.Name = "configureToolStripMenuItem1";
-            this.configureToolStripMenuItem1.Size = new System.Drawing.Size(127, 22);
+            this.configureToolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
             this.configureToolStripMenuItem1.Text = "Configure";
+            this.configureToolStripMenuItem1.Click += new System.EventHandler(this.configureToolStripMenuItem1_Click);
             // 
             // newToolStripMenuItem1
             // 
@@ -134,7 +135,6 @@
             this.MainMenuStrip = this.mStripOptions;
             this.Name = "MainForm";
             this.Text = "Memory game";
-            this.Load += new System.EventHandler(this.MainForm_Load);
             this.mStripOptions.ResumeLayout(false);
             this.mStripOptions.PerformLayout();
             this.ResumeLayout(false);

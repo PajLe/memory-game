@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,11 +23,6 @@ namespace Memory_game
             InitializeComponent();
         }
 
-        private void MainForm_Load(object sender, EventArgs e)
-        {
-            
-        }
-
         private void gameToolStripMenuItem1_Click(object sender, EventArgs e)
         {
             timePlayed = 0;
@@ -36,7 +32,9 @@ namespace Memory_game
                 grid.Dispose();
                 gameTimer.Stop();
             }
-            grid = new MemoryGrid();
+            int column, row, pair, diffPic;
+            readFromConfig(out column, out row, out pair, out diffPic);
+            grid = new MemoryGrid(row, column, pair, diffPic);
             grid.Location = new Point(0, labelTimer.Location.Y + labelTimer.Height);
             
             grid.firstOpened += new EventHandler(timerStart);
@@ -46,6 +44,17 @@ namespace Memory_game
             labelTimer.Text = "0";
             labelTimer.Location = new Point((grid.Width - labelTimer.Width) / 2, labelTimer.Location.Y);
             labelTimer.Visible = true;
+        }
+
+        private void readFromConfig(out int column, out int row, out int pair, out int diffPic)
+        {
+            using (StreamReader sr = new StreamReader(new FileStream("config.txt", FileMode.Open)))
+            {
+                column = int.Parse(sr.ReadLine());
+                row = int.Parse(sr.ReadLine());
+                pair = int.Parse(sr.ReadLine());
+                diffPic = int.Parse(sr.ReadLine());
+            }
         }
 
         private void timerStop(object sender, EventArgs e)
@@ -66,6 +75,12 @@ namespace Memory_game
         {
             labelTimer.Text = (++timePlayed).ToString();
             labelTimer.Location = new Point((grid.Width - labelTimer.Width) / 2, labelTimer.Location.Y);
+        }
+
+        private void configureToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            GridConfiguration form = new GridConfiguration();
+            form.ShowDialog();
         }
     }
 }
