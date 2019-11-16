@@ -18,6 +18,7 @@ namespace Game_data
         private Field[][] grid;
         private int closedFields;
         private ClosableField previousOpenedField = null;
+        private Timer closeTimer;
 
         // game parameters
         private int rowSize; // = 6;
@@ -37,7 +38,7 @@ namespace Game_data
 
         #region Constructors
 
-        public MemoryGrid() : this(6, 10, 10, 5) { }
+        public MemoryGrid() : this(6, 10, 20, 5) { }
 
         public MemoryGrid(int rowSize, int columnSize, int pairCount, int differentImageCount)
         {
@@ -45,9 +46,17 @@ namespace Game_data
             allocateGrid();
             this.ClientSize = new Size(columnSize * (fieldWidth + 3), rowSize * (fieldHeight + 3));
             initGame();
+            setUpCloseTimer();
         }
 
         #region Constructor Methods
+
+        private void setUpCloseTimer()
+        {
+            closeTimer = new Timer();
+            closeTimer.Interval = 1000;
+            closeTimer.Tick += new EventHandler(closeEmUp);
+        }
 
         private void setSizes(int rowSize, int columnSize, int pairCount, int differentImageCount)
         {
@@ -177,53 +186,51 @@ namespace Game_data
 
         private void Field_Click(object sender, EventArgs e)
         {
+            if (closeTimer.Enabled)
+                closeEmUp(closeTimer, null);
+            
             Field fld = sender as Field;
             if (fld == null)
                 return;
-            if (!fld.Open())
-                return;
-            Application.DoEvents();
-            closedFields--;
-            this.Parent.Text = closedFields.ToString();
-            BeginAndEndHandle();
-            if (previousOpenedField == null)
-                previousOpenedField = fld as ClosableField;
-            else
+
+            if (fld.Open())
             {
-                if (!previousOpenedField.OpenImage.Tag.Equals(fld.OpenImage.Tag))
-                    CloseFieldsRoutine(fld as ClosableField);
+                Application.DoEvents();
+                closedFields--;
+                this.Parent.Text = closedFields.ToString();
+                BeginAndEndHandle();
+                if (previousOpenedField == null)
+                    previousOpenedField = fld as ClosableField;
                 else
-                    previousOpenedField = null;
+                {
+                    if (!previousOpenedField.OpenImage.Tag.Equals(fld.OpenImage.Tag))
+                        CloseFieldsRoutine(fld as ClosableField);
+                    else
+                        previousOpenedField = null;
+                }
             }
+            
         }
 
         private void CloseFieldsRoutine(ClosableField currentOpenedField)
         {
             if (currentOpenedField == null)
                 return;
-            System.Threading.Thread.Sleep(1000);
-            /**Timer timer = new Timer();
-            timer.Interval = 1000;
-            timer.Tick += new EventHandler(closeEmUp);
-            timer.Start();
-            */
-            previousOpenedField.Close();
-            previousOpenedField = null;
-            closedFields++;
-            currentOpenedField.Close();
-            closedFields++;
+            
+            closeTimer.Tag = currentOpenedField;
+            closeTimer.Start();
             this.Parent.Text = closedFields.ToString();
         }
 
-        /*private void closeEmUp(object sender, EventArgs e)
+        private void closeEmUp(object sender, EventArgs e)
         {
-            (sender as Timer).Stop();
+            closeTimer.Stop();
             previousOpenedField.Close();
             previousOpenedField = null;
             closedFields++;
-            //currentOpenedField.Close();
+            (closeTimer.Tag as ClosableField)?.Close();
             closedFields++;
-        }*/
+        }
 
         private void BeginAndEndHandle()
         {

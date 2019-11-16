@@ -13,8 +13,9 @@ namespace Game_data
             {
                 Image = _closedImage;
                 opened = false;
+                return true;
             }
-            return !opened;
+            return false;
         }
     }
 }
