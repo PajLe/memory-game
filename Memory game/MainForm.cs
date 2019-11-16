@@ -82,5 +82,11 @@ namespace Memory_game
             GridConfiguration form = new GridConfiguration();
             form.ShowDialog();
         }
+
+        private void showAllToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (grid != null)
+                grid.OpenAllFields();
+        }
     }
 }

@@ -39,6 +39,7 @@
             this.newToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.gameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.labelTimer = new System.Windows.Forms.Label();
+            this.showAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mStripOptions.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -46,7 +47,8 @@
             // 
             this.mStripOptions.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem1,
-            this.newToolStripMenuItem1});
+            this.newToolStripMenuItem1,
+            this.showAllToolStripMenuItem});
             this.mStripOptions.Location = new System.Drawing.Point(0, 0);
             this.mStripOptions.Name = "mStripOptions";
             this.mStripOptions.Size = new System.Drawing.Size(1034, 24);
@@ -124,6 +126,13 @@
             this.labelTimer.Text = "labelTimer";
             this.labelTimer.Visible = false;
             // 
+            // showAllToolStripMenuItem
+            // 
+            this.showAllToolStripMenuItem.Name = "showAllToolStripMenuItem";
+            this.showAllToolStripMenuItem.Size = new System.Drawing.Size(65, 20);
+            this.showAllToolStripMenuItem.Text = "Show All";
+            this.showAllToolStripMenuItem.Click += new System.EventHandler(this.showAllToolStripMenuItem_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -155,6 +164,7 @@
         private System.Windows.Forms.ToolStripMenuItem configureToolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem newToolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem gameToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem showAllToolStripMenuItem;
     }
 }
 

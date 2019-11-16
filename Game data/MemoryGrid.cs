@@ -210,14 +210,14 @@ namespace Game_data
                         previousOpenedField = null;
                         pairCount--;
                         if (pairCount == 0)
-                            openAllFields();
+                            OpenAllFields();
                     }
                 }
             }
             
         }
 
-        private void openAllFields()
+        public void OpenAllFields()
         {
             for (int y = 0; y < rowCount; y++) 
                 for (int x = 0; x < columnCount; x++)
